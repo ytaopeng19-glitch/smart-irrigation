@@ -55,7 +55,7 @@
         /* 主容器 */
         .container {
             display: grid;
-            grid-template-columns: 280px 1fr 280px;
+            grid-template-columns: 300px 1fr 300px;
             gap: 20px;
             padding: 20px;
             height: calc(100vh - 70px);
@@ -287,6 +287,83 @@
             transition: height 0.5s;
         }
 
+        /* 新增模块：作物长势 */
+        .crop-item {
+            background: rgba(0, 100, 200, 0.1);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .crop-label {
+            font-size: 14px;
+            color: #a0cfff;
+        }
+
+        .crop-status {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+
+        .status-good {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .status-warning {
+            background: rgba(255, 152, 0, 0.2);
+            color: #ff9800;
+        }
+
+        /* 新增模块：病虫害预警 */
+        .pest-item {
+            background: rgba(0, 100, 200, 0.1);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pest-label {
+            font-size: 14px;
+            color: #a0cfff;
+        }
+
+        .pest-alert {
+            font-size: 16px;
+            font-weight: bold;
+            color: #f44336;
+        }
+
+        /* 新增模块：农机作业 */
+        .machine-item {
+            background: rgba(0, 100, 200, 0.1);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .machine-label {
+            font-size: 14px;
+            color: #a0cfff;
+        }
+
+        .machine-status {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00f2fe;
+        }
+
         /* 响应式适配 */
         @media (max-width: 1200px) {
             .container {
@@ -304,71 +381,129 @@
 
     <!-- 主内容区 -->
     <div class="container">
-        <!-- 左侧传感器数据 -->
-        <div class="card">
-            <div class="card-title">📊 实时环境监测</div>
-            
-            <div class="sensor-item">
-                <div class="sensor-label">🌱 土壤湿度</div>
-                <div class="sensor-value" id="soil">--%</div>
-            </div>
-            
-            <div class="sensor-item">
-                <div class="sensor-label">🌡️ 空气温度</div>
-                <div class="sensor-value" id="temp">--°C</div>
-            </div>
-            
-            <div class="sensor-item">
-                <div class="sensor-label">💧 空气湿度</div>
-                <div class="sensor-value" id="humi">--%</div>
-            </div>
-            
-            <div class="sensor-item">
-                <div class="sensor-label">☁️ 天气状态</div>
-                <div class="sensor-value" id="weather">--</div>
+        <!-- 左侧：环境监测+作物长势 -->
+        <div>
+            <div class="card">
+                <div class="card-title">📊 实时环境监测</div>
+                
+                <div class="sensor-item">
+                    <div class="sensor-label">🌱 土壤湿度</div>
+                    <div class="sensor-value" id="soil">--%</div>
+                </div>
+                
+                <div class="sensor-item">
+                    <div class="sensor-label">🌡️ 空气温度</div>
+                    <div class="sensor-value" id="temp">--°C</div>
+                </div>
+                
+                <div class="sensor-item">
+                    <div class="sensor-label">💧 空气湿度</div>
+                    <div class="sensor-value" id="humi">--%</div>
+                </div>
+                
+                <div class="sensor-item">
+                    <div class="sensor-label">☁️ 天气状态</div>
+                    <div class="sensor-value" id="weather">--</div>
+                </div>
+
+                <div class="card-title" style="margin-top: 30px;">📈 土壤湿度趋势</div>
+                <div class="trend-chart" id="trendChart">
+                    <!-- 柱状图会通过JS动态生成 -->
+                </div>
             </div>
 
-            <div class="card-title" style="margin-top: 30px;">📈 土壤湿度趋势</div>
-            <div class="trend-chart" id="trendChart">
-                <!-- 柱状图会通过JS动态生成 -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-title">🌾 作物长势监测</div>
+                
+                <div class="crop-item">
+                    <div class="crop-label">水稻 地块1</div>
+                    <div class="crop-status status-good">长势良好</div>
+                </div>
+                
+                <div class="crop-item">
+                    <div class="crop-label">玉米 地块2</div>
+                    <div class="crop-status status-warning">需补水</div>
+                </div>
+                
+                <div class="crop-item">
+                    <div class="crop-label">小麦 地块3</div>
+                    <div class="crop-status status-good">长势良好</div>
+                </div>
             </div>
         </div>
 
-        <!-- 中间地图区域 -->
+        <!-- 中间：农田地图 -->
         <div class="card map-container">
-            <div class="card-title">🗺️ 农田灌溉地图</div>
+            <div class="card-title">🗺️ 智慧农田示范区</div>
             <div class="map-area">
-                <div class="field field-1" id="field1">地块 1</div>
-                <div class="field field-2" id="field2">地块 2</div>
-                <div class="field field-3" id="field3">地块 3</div>
-                <div class="field field-4" id="field4">地块 4</div>
+                <div class="field field-1" id="field1">地块 1（水稻）</div>
+                <div class="field field-2" id="field2">地块 2（玉米）</div>
+                <div class="field field-3" id="field3">地块 3（小麦）</div>
+                <div class="field field-4" id="field4">地块 4（预留）</div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-title">🚜 农机作业状态</div>
+                <div class="machine-item">
+                    <div class="machine-label">播种机 PS-2001</div>
+                    <div class="machine-status">作业中</div>
+                </div>
+                <div class="machine-item">
+                    <div class="machine-label">无人机 UAV-2006</div>
+                    <div class="machine-status">待命</div>
+                </div>
+                <div class="machine-item">
+                    <div class="machine-label">灌溉泵 P-3001</div>
+                    <div class="machine-status" id="pumpStatus">关闭</div>
+                </div>
             </div>
         </div>
 
-        <!-- 右侧控制和状态 -->
-        <div class="card">
-            <div class="card-title">🎛️ 远程控制中心</div>
-            
-            <div class="control-panel">
-                <div class="status-display status-off" id="status">
-                    当前系统状态：<span>未灌溉</span>
-                </div>
+        <!-- 右侧：控制中心+病虫害预警 -->
+        <div>
+            <div class="card">
+                <div class="card-title">🎛️ 远程控制中心</div>
                 
-                <div class="btn-group">
-                    <button class="btn-on" id="btnOn" onclick="turnOn()">开启全部灌溉</button>
-                    <button class="btn-off" id="btnOff" onclick="turnOff()">关闭全部灌溉</button>
+                <div class="control-panel">
+                    <div class="status-display status-off" id="status">
+                        当前系统状态：<span>未灌溉</span>
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button class="btn-on" id="btnOn" onclick="turnOn()">开启全部灌溉</button>
+                        <button class="btn-off" id="btnOff" onclick="turnOff()">关闭全部灌溉</button>
+                    </div>
+                    
+                    <div class="error" id="errorMsg"></div>
                 </div>
-                
-                <div class="error" id="errorMsg"></div>
+
+                <div class="config-box">
+                    <div class="card-title" style="font-size: 14px; margin-bottom: 15px;">⚙️ ESP8266 配置</div>
+                    <input type="text" id="espIp" class="config-input" placeholder="输入ESP8266的IP地址" value="192.168.1.100">
+                    <button class="config-btn" onclick="saveIp()">保存IP地址</button>
+                    <p style="margin-top: 10px; font-size: 12px; color: #a0cfff;">
+                        提示：ESP8266连接WiFi后，串口会打印它的IP地址
+                    </p>
+                </div>
             </div>
 
-            <div class="config-box">
-                <div class="card-title" style="font-size: 14px; margin-bottom: 15px;">⚙️ ESP8266 配置</div>
-                <input type="text" id="espIp" class="config-input" placeholder="输入ESP8266的IP地址" value="192.168.1.100">
-                <button class="config-btn" onclick="saveIp()">保存IP地址</button>
-                <p style="margin-top: 10px; font-size: 12px; color: #a0cfff;">
-                    提示：ESP8266连接WiFi后，串口会打印它的IP地址
-                </p>
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-title">⚠️ 病虫害预警</div>
+                
+                <div class="pest-item">
+                    <div class="pest-label">稻飞虱 地块1</div>
+                    <div class="pest-alert">无预警</div>
+                </div>
+                
+                <div class="pest-item">
+                    <div class="pest-label">玉米螟 地块2</div>
+                    <div class="pest-alert">轻度预警</div>
+                </div>
+                
+                <div class="pest-item">
+                    <div class="pest-label">蚜虫 地块3</div>
+                    <div class="pest-alert">无预警</div>
+                </div>
             </div>
         </div>
     </div>
@@ -486,15 +621,20 @@
         // 更新灌溉状态显示
         function updateStatus(isOn) {
             const statusEl = document.getElementById('status');
+            const pumpStatusEl = document.getElementById('pumpStatus');
             const fields = document.querySelectorAll('.field');
             
             if (isOn) {
                 statusEl.className = 'status-display status-on';
                 statusEl.innerHTML = '当前系统状态：<span>灌溉中</span>';
+                pumpStatusEl.innerText = '运行中';
+                pumpStatusEl.style.color = '#4caf50';
                 fields.forEach(field => field.classList.add('irrigating'));
             } else {
                 statusEl.className = 'status-display status-off';
                 statusEl.innerHTML = '当前系统状态：<span>未灌溉</span>';
+                pumpStatusEl.innerText = '关闭';
+                pumpStatusEl.style.color = '#ff9800';
                 fields.forEach(field => field.classList.remove('irrigating'));
             }
         }
