@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧灌溉系统 - 远程控制</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "微软雅黑", Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .sensor-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+
+        .sensor-card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .sensor-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .sensor-title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .sensor-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .control-box {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .status {
+            font-size: 18px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .status-off {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .status-on {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-on {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-on:hover:not(:disabled) {
+            background: #43a047;
+        }
+
+        .btn-off {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-off:hover:not(:disabled) {
+            background: #e53935;
+        }
+
+        .update-time {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+        }
+
+        .config-box {
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .config-input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 200px;
+            margin-right: 10px;
+        }
+
+        .config-btn {
+            padding: 8px 16px;
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .error {
+            color: #f44336;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* 手机适配 */
+        @media (max-width: 500px) {
+            .sensor-grid {
+                grid-template-columns: 1fr;
+            }
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💧 智慧灌溉系统</h1>
+            <p>实时监控 · 远程控制</p >
+        </div>
+
+        <div class="sensor-grid">
+            <div class="sensor-card">
+                <div class="sensor-title">🌱 土壤湿度</div>
+                <div class="sensor-value" id="soil">加载中...</div>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-title">🌡️ 空气温度</div>
+                <div class="sensor-value" id="temp">加载中...</div>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-title">💧 空气湿度</div>
+                <div class="sensor-value" id="humi">加载中...</div>
+            </div>
+            <div class="sensor-card">
+                <div class="sensor-title">☁️ 天气状态</div>
+                <div class="sensor-value" id="weather">加载中...</div>
+            </div>
+        </div>
+
+        <div class="control-box">
+            <div class="status status-off" id="status">当前状态：未灌溉</div>
+            <div class="btn-group">
+                <button class="btn-on" id="btnOn" onclick="turnOn()">开启灌溉</button>
+                <button class="btn-off" id="btnOff" onclick="turnOff()">关闭灌溉</button>
+            </div>
+            <div class="error" id="errorMsg"></div>
+        </div>
+
+        <div class="update-time">
+            数据每3秒自动刷新 | 最后更新：<span id="time">--:--:--</span>
+        </div>
+
+        <!-- ESP8266 IP配置 -->
+        <div class="config-box">
+            <h3 style="margin-bottom: 15px; color: #333;">ESP8266 配置</h3>
+            <input type="text" id="espIp" class="config-input" placeholder="输入ESP8266的IP地址" value="192.168.1.100">
+            <button class="config-btn" onclick="saveIp()">保存IP</button>
+            <p style="margin-top: 10px; font-size: 12px; color: #666;">
+                提示：ESP8266连接WiFi后，串口会打印它的IP地址
+            </p >
+        </div>
+    </div>
+
+    <script>
+        // 从本地存储读取ESP8266 IP地址
+        let ESP_IP = localStorage.getItem('espIp') || '192.168.1.100';
+        document.getElementById('espIp').value = ESP_IP;
+
+        // 保存IP地址
+        function saveIp() {
+            ESP_IP = document.getElementById('espIp').value.trim();
+            localStorage.setItem('espIp', ESP_IP);
+            alert('IP地址已保存，将自动刷新数据');
+            fetchData(); // 立即刷新数据
+        }
+
+        // 从ESP8266获取传感器数据
+        async function fetchData() {
+            try {
+                const response = await fetch(`http://${ESP_IP}/data`);
+                if (!response.ok) throw new Error('连接失败');
+                
+                const data = await response.json();
+                // 更新页面数据
+                document.getElementById('soil').innerText = data.soil + '%';
+                document.getElementById('temp').innerText = data.temp + '°C';
+                document.getElementById('humi').innerText = data.humi + '%';
+                document.getElementById('weather').innerText = data.rain ? '下雨' : '无雨';
+                
+                // 更新灌溉状态
+                updateStatus(data.relay);
+                document.getElementById('errorMsg').innerText = '';
+            } catch (err) {
+                document.getElementById('errorMsg').innerText = `连接失败：${err.message}，请检查ESP8266是否在线`;
+            } finally {
+                document.getElementById('time').innerText = new Date().toLocaleTimeString();
+            }
+        }
+
+        // 控制灌溉
+        async function controlIrrigation(cmd) {
+            // 禁用按钮防止重复点击
+            document.getElementById('btnOn').disabled = true;
+            document.getElementById('btnOff').disabled = true;
+            
+            try {
+                const response = await fetch(`http://${ESP_IP}/control?relay=${cmd}`);
+                if (!response.ok) throw new Error('控制失败');
+                
+                const result = await response.text();
+                updateStatus(cmd === 'on');
+                document.getElementById('errorMsg').innerText = '';
+            } catch (err) {
+                document.getElementById('errorMsg').innerText = `控制失败：${err.message}`;
+            } finally {
+                // 重新启用按钮
+                document.getElementById('btnOn').disabled = false;
+                document.getElementById('btnOff').disabled = false;
+            }
+        }
+
+        function turnOn() {
+            controlIrrigation('on');
+        }
+
+        function turnOff() {
+            controlIrrigation('off');
+        }
+
+        // 更新灌溉状态显示
+        function updateStatus(isOn) {
+            const statusEl = document.getElementById('status');
+            if (isOn) {
+                statusEl.className = 'status status-on';
+                statusEl.innerText = '当前状态：灌溉中';
+            } else {
+                statusEl.className = 'status status-off';
+                statusEl.innerText = '当前状态：未灌溉';
+            }
+        }
+
+        // 页面加载时立即获取数据
+        fetchData();
+        // 每3秒自动刷新数据
+        setInterval(fetchData, 3000);
+    </script>
+</body>
+</html>
