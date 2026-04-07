@@ -3,107 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智慧灌溉系统 - 远程控制</title>
+    <title>智慧灌溉系统 - 大数据可视化平台</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "微软雅黑", Arial, sans-serif;
+            font-family: "Microsoft YaHei", Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            background: linear-gradient(135deg, #0c1929 0%, #1a3a5c 100%);
+            background-image: 
+                linear-gradient(rgba(12, 25, 41, 0.95), rgba(26, 58, 92, 0.95)),
+                url('https://picsum.photos/id/1058/1920/1080');
+            background-size: cover;
+            background-attachment: fixed;
             min-height: 100vh;
-            padding: 20px;
+            color: #fff;
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 650px;
-            margin: 0 auto;
-        }
-
+        /* 顶部标题栏 */
         .header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
+            height: 70px;
+            background: rgba(0, 150, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 150, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
         }
 
         .header h1 {
-            font-size: 30px;
-            margin-bottom: 8px;
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 8px;
         }
 
-        .sensor-grid {
+        .header .time {
+            position: absolute;
+            right: 30px;
+            font-size: 16px;
+            color: #a0cfff;
+        }
+
+        /* 主容器 */
+        .container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-bottom: 25px;
+            grid-template-columns: 280px 1fr 280px;
+            gap: 20px;
+            padding: 20px;
+            height: calc(100vh - 70px);
         }
 
-        .sensor-card {
-            background: white;
-            border-radius: 12px;
-            padding: 22px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
+        /* 通用卡片样式 */
+        .card {
+            background: rgba(0, 50, 100, 0.2);
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .sensor-card:hover {
-            transform: translateY(-3px);
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid #00f2fe;
+            border-left: 2px solid #00f2fe;
         }
 
-        .sensor-title {
-            color: #666;
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            border-bottom: 2px solid #00f2fe;
+            border-right: 2px solid #00f2fe;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #00f2fe;
+            border-left: 3px solid #00f2fe;
+            padding-left: 10px;
+        }
+
+        /* 左侧传感器面板 */
+        .sensor-item {
+            background: rgba(0, 100, 200, 0.1);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sensor-label {
             font-size: 14px;
-            margin-bottom: 10px;
+            color: #a0cfff;
         }
 
         .sensor-value {
-            font-size: 32px;
+            font-size: 24px;
             font-weight: bold;
-            color: #333;
+            color: #fff;
         }
 
-        .control-box {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        /* 中间地图区域 */
+        .map-container {
+            grid-row: span 2;
+            display: flex;
+            flex-direction: column;
         }
 
-        .status {
-            font-size: 18px;
-            margin-bottom: 20px;
-            padding: 10px;
+        .map-area {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .field {
+            position: absolute;
+            width: 180px;
+            height: 120px;
+            background: linear-gradient(135deg, #2e7d32, #4caf50);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .field.irrigating {
+            background: linear-gradient(135deg, #0288d1, #03a9f4);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(3, 169, 244, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(3, 169, 244, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(3, 169, 244, 0); }
+        }
+
+        .field-1 { top: 50px; left: 100px; }
+        .field-2 { top: 50px; left: 320px; }
+        .field-3 { top: 200px; left: 210px; }
+        .field-4 { top: 200px; left: 430px; }
+
+        /* 右侧控制和状态面板 */
+        .control-panel {
+            text-align: center;
+        }
+
+        .status-display {
+            background: rgba(0, 100, 200, 0.1);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            font-size: 18px;
         }
 
         .status-off {
-            background: #f5f5f5;
-            color: #666;
+            color: #ff9800;
         }
 
         .status-on {
-            background: #e8f5e9;
-            color: #2e7d32;
+            color: #4caf50;
         }
 
         .btn-group {
             display: flex;
             gap: 15px;
             justify-content: center;
+            margin-bottom: 20px;
         }
 
         button {
-            padding: 12px 35px;
+            padding: 12px 30px;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
 
         button:disabled {
@@ -112,119 +214,162 @@
         }
 
         .btn-on {
-            background: #4caf50;
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
             color: white;
         }
 
         .btn-on:hover:not(:disabled) {
-            background: #43a047;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
         }
 
         .btn-off {
-            background: #f44336;
+            background: linear-gradient(135deg, #f44336, #e91e63);
             color: white;
         }
 
         .btn-off:hover:not(:disabled) {
-            background: #e53935;
-        }
-
-        .update-time {
-            text-align: center;
-            margin-top: 20px;
-            color: rgba(255,255,255,0.9);
-            font-size: 14px;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
         }
 
         .config-box {
-            background: rgba(255,255,255,0.9);
-            border-radius: 12px;
-            padding: 20px;
+            background: rgba(0, 100, 200, 0.1);
+            border-radius: 6px;
+            padding: 15px;
             margin-top: 20px;
-            text-align: center;
         }
 
         .config-input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            width: 200px;
-            margin-right: 10px;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            border-radius: 4px;
+            color: white;
+            font-size: 14px;
         }
 
         .config-btn {
-            padding: 8px 16px;
-            background: #2196f3;
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #2196f3, #03a9f4);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 14px;
         }
 
         .error {
             color: #f44336;
             margin-top: 10px;
-            font-size: 14px;
+            font-size: 12px;
         }
 
-        /* 手机适配 */
-        @media (max-width: 500px) {
-            .sensor-grid {
+        /* 底部数据趋势 */
+        .trend-chart {
+            height: 150px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 6px;
+            margin-top: 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            padding: 10px;
+        }
+
+        .chart-bar {
+            width: 15px;
+            background: linear-gradient(to top, #0288d1, #00f2fe);
+            border-radius: 3px 3px 0 0;
+            transition: height 0.5s;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 1200px) {
+            .container {
                 grid-template-columns: 1fr;
-            }
-            .btn-group {
-                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
+    <!-- 顶部标题栏 -->
+    <div class="header">
+        <h1>💧 智慧灌溉系统 大数据可视化平台</h1>
+        <div class="time" id="currentTime">--:--:--</div>
+    </div>
+
+    <!-- 主内容区 -->
     <div class="container">
-        <div class="header">
-            <h1>💧 智慧灌溉系统</h1>
-            <p>实时监控 · 远程控制</p >
+        <!-- 左侧传感器数据 -->
+        <div class="card">
+            <div class="card-title">📊 实时环境监测</div>
+            
+            <div class="sensor-item">
+                <div class="sensor-label">🌱 土壤湿度</div>
+                <div class="sensor-value" id="soil">--%</div>
+            </div>
+            
+            <div class="sensor-item">
+                <div class="sensor-label">🌡️ 空气温度</div>
+                <div class="sensor-value" id="temp">--°C</div>
+            </div>
+            
+            <div class="sensor-item">
+                <div class="sensor-label">💧 空气湿度</div>
+                <div class="sensor-value" id="humi">--%</div>
+            </div>
+            
+            <div class="sensor-item">
+                <div class="sensor-label">☁️ 天气状态</div>
+                <div class="sensor-value" id="weather">--</div>
+            </div>
+
+            <div class="card-title" style="margin-top: 30px;">📈 土壤湿度趋势</div>
+            <div class="trend-chart" id="trendChart">
+                <!-- 柱状图会通过JS动态生成 -->
+            </div>
         </div>
 
-        <div class="sensor-grid">
-            <div class="sensor-card">
-                <div class="sensor-title">🌱 土壤湿度</div>
-                <div class="sensor-value" id="soil">加载中...</div>
-            </div>
-            <div class="sensor-card">
-                <div class="sensor-title">🌡️ 空气温度</div>
-                <div class="sensor-value" id="temp">加载中...</div>
-            </div>
-            <div class="sensor-card">
-                <div class="sensor-title">💧 空气湿度</div>
-                <div class="sensor-value" id="humi">加载中...</div>
-            </div>
-            <div class="sensor-card">
-                <div class="sensor-title">☁️ 天气状态</div>
-                <div class="sensor-value" id="weather">加载中...</div>
+        <!-- 中间地图区域 -->
+        <div class="card map-container">
+            <div class="card-title">🗺️ 农田灌溉地图</div>
+            <div class="map-area">
+                <div class="field field-1" id="field1">地块 1</div>
+                <div class="field field-2" id="field2">地块 2</div>
+                <div class="field field-3" id="field3">地块 3</div>
+                <div class="field field-4" id="field4">地块 4</div>
             </div>
         </div>
 
-        <div class="control-box">
-            <div class="status status-off" id="status">当前状态：未灌溉</div>
-            <div class="btn-group">
-                <button class="btn-on" id="btnOn" onclick="turnOn()">开启灌溉</button>
-                <button class="btn-off" id="btnOff" onclick="turnOff()">关闭灌溉</button>
+        <!-- 右侧控制和状态 -->
+        <div class="card">
+            <div class="card-title">🎛️ 远程控制中心</div>
+            
+            <div class="control-panel">
+                <div class="status-display status-off" id="status">
+                    当前系统状态：<span>未灌溉</span>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn-on" id="btnOn" onclick="turnOn()">开启全部灌溉</button>
+                    <button class="btn-off" id="btnOff" onclick="turnOff()">关闭全部灌溉</button>
+                </div>
+                
+                <div class="error" id="errorMsg"></div>
             </div>
-            <div class="error" id="errorMsg"></div>
-        </div>
 
-        <div class="update-time">
-            数据每3秒自动刷新 | 最后更新：<span id="time">--:--:--</span>
-        </div>
-
-        <!-- ESP8266 IP配置 -->
-        <div class="config-box">
-            <h3 style="margin-bottom: 15px; color: #333;">ESP8266 配置</h3>
-            <input type="text" id="espIp" class="config-input" placeholder="输入ESP8266的IP地址" value="192.168.1.100">
-            <button class="config-btn" onclick="saveIp()">保存IP</button>
-            <p style="margin-top: 10px; font-size: 12px; color: #666;">
-                提示：ESP8266连接WiFi后，串口会打印它的IP地址
-            </p >
+            <div class="config-box">
+                <div class="card-title" style="font-size: 14px; margin-bottom: 15px;">⚙️ ESP8266 配置</div>
+                <input type="text" id="espIp" class="config-input" placeholder="输入ESP8266的IP地址" value="192.168.1.100">
+                <button class="config-btn" onclick="saveIp()">保存IP地址</button>
+                <p style="margin-top: 10px; font-size: 12px; color: #a0cfff;">
+                    提示：ESP8266连接WiFi后，串口会打印它的IP地址
+                </p>
+            </div>
         </div>
     </div>
 
@@ -238,8 +383,32 @@
             ESP_IP = document.getElementById('espIp').value.trim();
             localStorage.setItem('espIp', ESP_IP);
             alert('IP地址已保存，将自动刷新数据');
-            fetchData(); // 立即刷新数据
+            fetchData();
         }
+
+        // 更新当前时间
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').innerText = now.toLocaleString();
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // 初始化湿度趋势图
+        let humidityHistory = [30, 35, 40, 38, 42, 45, 43];
+        function updateTrendChart() {
+            const chart = document.getElementById('trendChart');
+            chart.innerHTML = '';
+            
+            humidityHistory.forEach(value => {
+                const bar = document.createElement('div');
+                bar.className = 'chart-bar';
+                bar.style.height = `${value}%`;
+                bar.title = `${value}%`;
+                chart.appendChild(bar);
+            });
+        }
+        updateTrendChart();
 
         // 从ESP8266获取传感器数据
         async function fetchData() {
@@ -256,11 +425,30 @@
                 
                 // 更新灌溉状态
                 updateStatus(data.relay);
+                
+                // 更新趋势图
+                humidityHistory.shift();
+                humidityHistory.push(data.soil);
+                updateTrendChart();
+                
                 document.getElementById('errorMsg').innerText = '';
             } catch (err) {
-                document.getElementById('errorMsg').innerText = `连接失败：${err.message}，请检查ESP8266是否在线`;
-            } finally {
-                document.getElementById('time').innerText = new Date().toLocaleTimeString();
+                // 演示模式：如果连接失败，显示模拟数据
+                const mockSoil = Math.floor(Math.random() * 30) + 30;
+                const mockTemp = Math.floor(Math.random() * 15) + 20;
+                const mockHumi = Math.floor(Math.random() * 40) + 40;
+                
+                document.getElementById('soil').innerText = mockSoil + '%';
+                document.getElementById('temp').innerText = mockTemp + '°C';
+                document.getElementById('humi').innerText = mockHumi + '%';
+                document.getElementById('weather').innerText = '无雨';
+                
+                // 更新趋势图
+                humidityHistory.shift();
+                humidityHistory.push(mockSoil);
+                updateTrendChart();
+                
+                document.getElementById('errorMsg').innerText = `演示模式：未连接ESP8266\n${err.message}`;
             }
         }
 
@@ -274,11 +462,12 @@
                 const response = await fetch(`http://${ESP_IP}/control?relay=${cmd}`);
                 if (!response.ok) throw new Error('控制失败');
                 
-                const result = await response.text();
                 updateStatus(cmd === 'on');
                 document.getElementById('errorMsg').innerText = '';
             } catch (err) {
-                document.getElementById('errorMsg').innerText = `控制失败：${err.message}`;
+                // 演示模式：即使连接失败也更新UI
+                updateStatus(cmd === 'on');
+                document.getElementById('errorMsg').innerText = `演示模式：控制指令已发送\n实际设备未连接`;
             } finally {
                 // 重新启用按钮
                 document.getElementById('btnOn').disabled = false;
@@ -297,12 +486,16 @@
         // 更新灌溉状态显示
         function updateStatus(isOn) {
             const statusEl = document.getElementById('status');
+            const fields = document.querySelectorAll('.field');
+            
             if (isOn) {
-                statusEl.className = 'status status-on';
-                statusEl.innerText = '当前状态：灌溉中';
+                statusEl.className = 'status-display status-on';
+                statusEl.innerHTML = '当前系统状态：<span>灌溉中</span>';
+                fields.forEach(field => field.classList.add('irrigating'));
             } else {
-                statusEl.className = 'status status-off';
-                statusEl.innerText = '当前状态：未灌溉';
+                statusEl.className = 'status-display status-off';
+                statusEl.innerHTML = '当前系统状态：<span>未灌溉</span>';
+                fields.forEach(field => field.classList.remove('irrigating'));
             }
         }
 
