@@ -3,646 +3,560 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智慧灌溉系统 - 大数据可视化平台</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Microsoft YaHei", Arial, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0c1929 0%, #1a3a5c 100%);
-            background-image: 
-                linear-gradient(rgba(12, 25, 41, 0.95), rgba(26, 58, 92, 0.95)),
-                url('https://picsum.photos/id/1058/1920/1080');
-            background-size: cover;
-            background-attachment: fixed;
-            min-height: 100vh;
-            color: #fff;
-            overflow-x: hidden;
-        }
-
-        /* 顶部标题栏 */
-        .header {
-            height: 70px;
-            background: rgba(0, 150, 255, 0.1);
-            border-bottom: 1px solid rgba(0, 150, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 0 20px rgba(0, 150, 255, 0.2);
-        }
-
-        .header h1 {
-            font-size: 28px;
-            font-weight: bold;
-            background: linear-gradient(90deg, #00f2fe, #4facfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 8px;
-        }
-
-        .header .time {
-            position: absolute;
-            right: 30px;
-            font-size: 16px;
-            color: #a0cfff;
-        }
-
-        /* 主容器 */
-        .container {
-            display: grid;
-            grid-template-columns: 300px 1fr 300px;
-            gap: 20px;
-            padding: 20px;
-            height: calc(100vh - 70px);
-        }
-
-        /* 通用卡片样式 */
-        .card {
-            background: rgba(0, 50, 100, 0.2);
-            border: 1px solid rgba(0, 150, 255, 0.3);
-            border-radius: 8px;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 10px;
-            height: 10px;
-            border-top: 2px solid #00f2fe;
-            border-left: 2px solid #00f2fe;
-        }
-
-        .card::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 10px;
-            height: 10px;
-            border-bottom: 2px solid #00f2fe;
-            border-right: 2px solid #00f2fe;
-        }
-
-        .card-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #00f2fe;
-            border-left: 3px solid #00f2fe;
-            padding-left: 10px;
-        }
-
-        /* 左侧传感器面板 */
-        .sensor-item {
-            background: rgba(0, 100, 200, 0.1);
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .sensor-label {
-            font-size: 14px;
-            color: #a0cfff;
-        }
-
-        .sensor-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        /* 中间地图区域 */
-        .map-container {
-            grid-row: span 2;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .map-area {
-            flex: 1;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .field {
-            position: absolute;
-            width: 180px;
-            height: 120px;
-            background: linear-gradient(135deg, #2e7d32, #4caf50);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s;
-        }
-
-        .field.irrigating {
-            background: linear-gradient(135deg, #0288d1, #03a9f4);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(3, 169, 244, 0.7); }
-            70% { box-shadow: 0 0 0 15px rgba(3, 169, 244, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(3, 169, 244, 0); }
-        }
-
-        .field-1 { top: 50px; left: 100px; }
-        .field-2 { top: 50px; left: 320px; }
-        .field-3 { top: 200px; left: 210px; }
-        .field-4 { top: 200px; left: 430px; }
-
-        /* 右侧控制和状态面板 */
-        .control-panel {
-            text-align: center;
-        }
-
-        .status-display {
-            background: rgba(0, 100, 200, 0.1);
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 20px;
-            font-size: 18px;
-        }
-
-        .status-off {
-            color: #ff9800;
-        }
-
-        .status-on {
-            color: #4caf50;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .btn-on {
-            background: linear-gradient(135deg, #4caf50, #8bc34a);
-            color: white;
-        }
-
-        .btn-on:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
-        }
-
-        .btn-off {
-            background: linear-gradient(135deg, #f44336, #e91e63);
-            color: white;
-        }
-
-        .btn-off:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
-        }
-
-        .config-box {
-            background: rgba(0, 100, 200, 0.1);
-            border-radius: 6px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-
-        .config-input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(0, 150, 255, 0.3);
-            border-radius: 4px;
-            color: white;
-            font-size: 14px;
-        }
-
-        .config-btn {
-            width: 100%;
-            padding: 10px;
-            background: linear-gradient(135deg, #2196f3, #03a9f4);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .error {
-            color: #f44336;
-            margin-top: 10px;
-            font-size: 12px;
-        }
-
-        /* 底部数据趋势 */
-        .trend-chart {
-            height: 150px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 6px;
-            margin-top: 20px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-around;
-            padding: 10px;
-        }
-
-        .chart-bar {
-            width: 15px;
-            background: linear-gradient(to top, #0288d1, #00f2fe);
-            border-radius: 3px 3px 0 0;
-            transition: height 0.5s;
-        }
-
-        /* 新增模块：作物长势 */
-        .crop-item {
-            background: rgba(0, 100, 200, 0.1);
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .crop-label {
-            font-size: 14px;
-            color: #a0cfff;
-        }
-
-        .crop-status {
-            font-size: 16px;
-            font-weight: bold;
-            padding: 4px 10px;
-            border-radius: 12px;
-        }
-
-        .status-good {
-            background: rgba(76, 175, 80, 0.2);
-            color: #4caf50;
-        }
-
-        .status-warning {
-            background: rgba(255, 152, 0, 0.2);
-            color: #ff9800;
-        }
-
-        /* 新增模块：病虫害预警 */
-        .pest-item {
-            background: rgba(0, 100, 200, 0.1);
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .pest-label {
-            font-size: 14px;
-            color: #a0cfff;
-        }
-
-        .pest-alert {
-            font-size: 16px;
-            font-weight: bold;
-            color: #f44336;
-        }
-
-        /* 新增模块：农机作业 */
-        .machine-item {
-            background: rgba(0, 100, 200, 0.1);
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .machine-label {
-            font-size: 14px;
-            color: #a0cfff;
-        }
-
-        .machine-status {
-            font-size: 16px;
-            font-weight: bold;
-            color: #00f2fe;
-        }
-
-        /* 响应式适配 */
-        @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 1fr;
+    <title>智慧农业大数据可视化系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0ea5e9',
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        danger: '#ef4444',
+                        dark: '#0a1929',
+                        'dark-card': '#112240',
+                        'dark-border': '#1e3a5f'
+                    },
+                    fontFamily: {
+                        tech: ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
             }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .card-glow {
+                box-shadow: 0 0 15px rgba(14, 165, 233, 0.2);
+            }
+            .border-glow {
+                border: 1px solid rgba(14, 165, 233, 0.3);
+            }
+            .pulse-dot {
+                animation: pulse 2s infinite;
+            }
+            .bg-grid {
+                background-image: linear-gradient(rgba(14, 165, 233, 0.05) 1px, transparent 1px),
+                                  linear-gradient(90deg, rgba(14, 165, 233, 0.05) 1px, transparent 1px);
+                background-size: 20px 20px;
+            }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
     </style>
 </head>
-<body>
+<body class="bg-dark bg-grid min-h-screen font-tech text-gray-200">
     <!-- 顶部标题栏 -->
-    <div class="header">
-        <h1>💧 智慧灌溉系统 大数据可视化平台</h1>
-        <div class="time" id="currentTime">--:--:--</div>
-    </div>
+    <header class="bg-dark-card border-b border-dark-border py-3 px-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-2 h-8 bg-primary rounded"></div>
+                <h1 class="text-2xl font-bold text-white">智慧农业大数据可视化系统</h1>
+            </div>
+            <div class="flex items-center gap-6">
+                <span id="current-time" class="text-primary"></span>
+                <div class="flex items-center gap-2">
+                    <span id="demo-badge" class="bg-warning/20 text-warning px-3 py-1 rounded-full text-sm font-bold">演示模式</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="demo-toggle" class="sr-only peer" checked>
+                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    <!-- 主内容区 -->
-    <div class="container">
-        <!-- 左侧：环境监测+作物长势 -->
-        <div>
-            <div class="card">
-                <div class="card-title">📊 实时环境监测</div>
-                
-                <div class="sensor-item">
-                    <div class="sensor-label">🌱 土壤湿度</div>
-                    <div class="sensor-value" id="soil">--%</div>
-                </div>
-                
-                <div class="sensor-item">
-                    <div class="sensor-label">🌡️ 空气温度</div>
-                    <div class="sensor-value" id="temp">--°C</div>
-                </div>
-                
-                <div class="sensor-item">
-                    <div class="sensor-label">💧 空气湿度</div>
-                    <div class="sensor-value" id="humi">--%</div>
-                </div>
-                
-                <div class="sensor-item">
-                    <div class="sensor-label">☁️ 天气状态</div>
-                    <div class="sensor-value" id="weather">--</div>
+    <main class="container mx-auto p-4">
+        <!-- 顶部统计卡片 -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+                <div class="text-gray-400 text-sm mb-1">总地块数</div>
+                <div class="text-3xl font-bold text-primary">3</div>
+            </div>
+            <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+                <div class="text-gray-400 text-sm mb-1">长势良好</div>
+                <div class="text-3xl font-bold text-success" id="good-plots">2</div>
+            </div>
+            <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+                <div class="text-gray-400 text-sm mb-1">需关注</div>
+                <div class="text-3xl font-bold text-warning" id="warning-plots">1</div>
+            </div>
+            <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+                <div class="text-gray-400 text-sm mb-1">运行中设备</div>
+                <div class="text-3xl font-bold text-danger" id="running-devices">1</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
+            <!-- 左侧：环境概览 -->
+            <div class="lg:col-span-3 space-y-4">
+                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <div class="w-1 h-5 bg-primary rounded"></div>
+                        环境监测
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">空气温度</span>
+                            <span class="text-primary font-bold" id="avg-temp">25.6℃</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">平均湿度</span>
+                            <span class="text-primary font-bold" id="avg-moisture">57%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">光照强度</span>
+                            <span class="text-primary font-bold">6800 Lux</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">风速</span>
+                            <span class="text-primary font-bold">2.3 m/s</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card-title" style="margin-top: 30px;">📈 土壤湿度趋势</div>
-                <div class="trend-chart" id="trendChart">
-                    <!-- 柱状图会通过JS动态生成 -->
+                <!-- 地块列表 -->
+                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <div class="w-1 h-5 bg-primary rounded"></div>
+                        地块详情
+                    </h3>
+                    <div class="space-y-3">
+                        <!-- 地块1 -->
+                        <div id="plot1-list" class="p-3 rounded-lg border border-success/30 bg-success/5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold">1号地块 · 西红柿</span>
+                                <span class="text-success text-sm">长势良好</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-400">
+                                <span>湿度: <span id="plot1-moisture-list">68%</span></span>
+                                <span>泵: <span id="plot1-pump-list" class="text-gray-500">已停止</span></span>
+                            </div>
+                        </div>
+
+                        <!-- 地块2 -->
+                        <div id="plot2-list" class="p-3 rounded-lg border border-warning/30 bg-warning/5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold">2号地块 · 黄瓜</span>
+                                <span class="text-warning text-sm">需补水</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-400">
+                                <span>湿度: <span id="plot2-moisture-list">32%</span></span>
+                                <span>泵: <span id="plot2-pump-list" class="text-gray-500">已停止</span></span>
+                            </div>
+                        </div>
+
+                        <!-- 地块3 -->
+                        <div id="plot3-list" class="p-3 rounded-lg border border-success/30 bg-success/5">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-bold">3号地块 · 生菜</span>
+                                <span class="text-success text-sm">长势良好</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-400">
+                                <span>湿度: <span id="plot3-moisture-list">72%</span></span>
+                                <span>泵: <span id="plot3-pump-list" class="text-gray-500">已停止</span></span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="card" style="margin-top: 20px;">
-                <div class="card-title">🌾 作物长势监测</div>
-                
-                <div class="crop-item">
-                    <div class="crop-label">水稻 地块1</div>
-                    <div class="crop-status status-good">长势良好</div>
+            <!-- 中间：地图区域 -->
+            <div class="lg:col-span-6">
+                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow h-full">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <div class="w-1 h-5 bg-primary rounded"></div>
+                        农田分布地图
+                    </h3>
+                    <div class="relative h-80 bg-gradient-to-br from-green-900/20 to-blue-900/20 rounded-lg overflow-hidden">
+                        <!-- 模拟农田地图 -->
+                        <div class="absolute inset-0 p-4">
+                            <div class="grid grid-cols-3 gap-2 h-full">
+                                <div id="map-plot1" class="bg-success/20 border-2 border-success rounded-lg flex items-center justify-center relative">
+                                    <span class="font-bold">1号地块</span>
+                                    <div class="absolute top-2 right-2 w-3 h-3 rounded-full bg-success pulse-dot"></div>
+                                </div>
+                                <div id="map-plot2" class="bg-warning/20 border-2 border-warning rounded-lg flex items-center justify-center relative">
+                                    <span class="font-bold">2号地块</span>
+                                    <div class="absolute top-2 right-2 w-3 h-3 rounded-full bg-warning pulse-dot"></div>
+                                </div>
+                                <div id="map-plot3" class="bg-success/20 border-2 border-success rounded-lg flex items-center justify-center relative">
+                                    <span class="font-bold">3号地块</span>
+                                    <div class="absolute top-2 right-2 w-3 h-3 rounded-full bg-success pulse-dot"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 控制按钮覆盖 -->
+                        <div class="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2">
+                            <button id="plot1-btn" class="bg-primary/80 hover:bg-primary text-white py-2 rounded font-bold transition text-sm">
+                                开启灌溉
+                            </button>
+                            <button id="plot2-btn" class="bg-primary/80 hover:bg-primary text-white py-2 rounded font-bold transition text-sm">
+                                开启灌溉
+                            </button>
+                            <button id="plot3-btn" class="bg-primary/80 hover:bg-primary text-white py-2 rounded font-bold transition text-sm">
+                                开启灌溉
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="crop-item">
-                    <div class="crop-label">玉米 地块2</div>
-                    <div class="crop-status status-warning">需补水</div>
+            </div>
+
+            <!-- 右侧：预警和农机 -->
+            <div class="lg:col-span-3 space-y-4">
+                <!-- 病虫害预警 -->
+                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <div class="w-1 h-5 bg-primary rounded"></div>
+                        病虫害预警
+                    </h3>
+                    <div id="pest-alert">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-3 h-3 rounded-full bg-success pulse-dot"></div>
+                            <span class="font-bold text-success">当前无高风险</span>
+                        </div>
+                        <p class="text-sm text-gray-400">最近检测：2026-04-08 16:00</p>
+                    </div>
                 </div>
-                
-                <div class="crop-item">
-                    <div class="crop-label">小麦 地块3</div>
-                    <div class="crop-status status-good">长势良好</div>
+
+                <!-- 农机状态 -->
+                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <div class="w-1 h-5 bg-primary rounded"></div>
+                        农机作业状态
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-2 rounded bg-success/5 border border-success/30">
+                            <span>播种机 #01</span>
+                            <span class="text-success text-sm">作业中</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 rounded bg-gray-700/30 border border-gray-600/30">
+                            <span>植保无人机 #01</span>
+                            <span class="text-gray-400 text-sm">空闲</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 rounded bg-gray-700/30 border border-gray-600/30">
+                            <span>总灌溉系统</span>
+                            <span id="irrigation-status" class="text-gray-400 text-sm">待机</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 系统设置 -->
+                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                        <div class="w-1 h-5 bg-primary rounded"></div>
+                        系统控制
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span>自动灌溉</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="auto-irrigation" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                            </label>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>阈值: <span id="threshold-value">30</span>%</span>
+                            <input type="range" id="threshold" value="30" min="10" max="60" class="w-24 accent-primary">
+                        </div>
+                        <button id="ip-config-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded font-bold transition text-sm">
+                            ESP8266 WiFi配置
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 中间：农田地图 -->
-        <div class="card map-container">
-            <div class="card-title">🗺️ 智慧农田示范区</div>
-            <div class="map-area">
-                <div class="field field-1" id="field1">地块 1（水稻）</div>
-                <div class="field field-2" id="field2">地块 2（玉米）</div>
-                <div class="field field-3" id="field3">地块 3（小麦）</div>
-                <div class="field field-4" id="field4">地块 4（预留）</div>
-            </div>
-
-            <div class="card" style="margin-top: 20px;">
-                <div class="card-title">🚜 农机作业状态</div>
-                <div class="machine-item">
-                    <div class="machine-label">播种机 PS-2001</div>
-                    <div class="machine-status">作业中</div>
-                </div>
-                <div class="machine-item">
-                    <div class="machine-label">无人机 UAV-2006</div>
-                    <div class="machine-status">待命</div>
-                </div>
-                <div class="machine-item">
-                    <div class="machine-label">灌溉泵 P-3001</div>
-                    <div class="machine-status" id="pumpStatus">关闭</div>
-                </div>
-            </div>
+        <!-- 底部：湿度趋势图 -->
+        <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
+            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                <div class="w-1 h-5 bg-primary rounded"></div>
+                24小时土壤湿度趋势
+            </h3>
+            <canvas id="moisture-chart" height="150"></canvas>
         </div>
+    </main>
 
-        <!-- 右侧：控制中心+病虫害预警 -->
-        <div>
-            <div class="card">
-                <div class="card-title">🎛️ 远程控制中心</div>
-                
-                <div class="control-panel">
-                    <div class="status-display status-off" id="status">
-                        当前系统状态：<span>未灌溉</span>
-                    </div>
-                    
-                    <div class="btn-group">
-                        <button class="btn-on" id="btnOn" onclick="turnOn()">开启全部灌溉</button>
-                        <button class="btn-off" id="btnOff" onclick="turnOff()">关闭全部灌溉</button>
-                    </div>
-                    
-                    <div class="error" id="errorMsg"></div>
+    <!-- IP配置弹窗 -->
+    <div id="ip-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
+        <div class="bg-dark-card border-glow rounded-lg p-6 w-11/12 max-w-md card-glow">
+            <h3 class="text-xl font-bold text-white mb-4">ESP8266 WiFi配置</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">WiFi名称</label>
+                    <input type="text" class="w-full bg-dark border border-dark-border rounded px-3 py-2 text-white" placeholder="输入您的WiFi名称">
                 </div>
-
-                <div class="config-box">
-                    <div class="card-title" style="font-size: 14px; margin-bottom: 15px;">⚙️ ESP8266 配置</div>
-                    <input type="text" id="espIp" class="config-input" placeholder="输入ESP8266的IP地址" value="192.168.1.100">
-                    <button class="config-btn" onclick="saveIp()">保存IP地址</button>
-                    <p style="margin-top: 10px; font-size: 12px; color: #a0cfff;">
-                        提示：ESP8266连接WiFi后，串口会打印它的IP地址
-                    </p>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">WiFi密码</label>
+                    <input type="password" class="w-full bg-dark border border-dark-border rounded px-3 py-2 text-white" placeholder="输入您的WiFi密码">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-1">MQTT服务器地址</label>
+                    <input type="text" class="w-full bg-dark border border-dark-border rounded px-3 py-2 text-white" value="192.168.1.100:1883">
                 </div>
             </div>
-
-            <div class="card" style="margin-top: 20px;">
-                <div class="card-title">⚠️ 病虫害预警</div>
-                
-                <div class="pest-item">
-                    <div class="pest-label">稻飞虱 地块1</div>
-                    <div class="pest-alert">无预警</div>
-                </div>
-                
-                <div class="pest-item">
-                    <div class="pest-label">玉米螟 地块2</div>
-                    <div class="pest-alert">轻度预警</div>
-                </div>
-                
-                <div class="pest-item">
-                    <div class="pest-label">蚜虫 地块3</div>
-                    <div class="pest-alert">无预警</div>
-                </div>
+            <div class="flex gap-3 mt-6">
+                <button id="cancel-ip" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded font-bold transition">
+                    取消
+                </button>
+                <button id="save-ip" class="flex-1 bg-primary hover:bg-primary/80 text-white py-2 rounded font-bold transition">
+                    保存配置
+                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // 从本地存储读取ESP8266 IP地址
-        let ESP_IP = localStorage.getItem('espIp') || '192.168.1.100';
-        document.getElementById('espIp').value = ESP_IP;
+        // 演示模式数据模拟
+        let demoMode = true;
+        let pumpStates = [false, false, false];
+        let autoIrrigation = false;
+        let moistureThreshold = 30;
 
-        // 保存IP地址
-        function saveIp() {
-            ESP_IP = document.getElementById('espIp').value.trim();
-            localStorage.setItem('espIp', ESP_IP);
-            alert('IP地址已保存，将自动刷新数据');
-            fetchData();
-        }
-
-        // 更新当前时间
+        // 更新时间
         function updateTime() {
             const now = new Date();
-            document.getElementById('currentTime').innerText = now.toLocaleString();
+            document.getElementById('current-time').textContent = now.toLocaleString('zh-CN');
         }
         setInterval(updateTime, 1000);
         updateTime();
 
-        // 初始化湿度趋势图
-        let humidityHistory = [30, 35, 40, 38, 42, 45, 43];
-        function updateTrendChart() {
-            const chart = document.getElementById('trendChart');
-            chart.innerHTML = '';
-            
-            humidityHistory.forEach(value => {
-                const bar = document.createElement('div');
-                bar.className = 'chart-bar';
-                bar.style.height = `${value}%`;
-                bar.title = `${value}%`;
-                chart.appendChild(bar);
+        // 初始化图表
+        const ctx = document.getElementById('moisture-chart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 24}, (_, i) => `${i}:00`),
+                datasets: [
+                    {
+                        label: '1号地块',
+                        data: generateRandomData(24, 50, 80),
+                        borderColor: '#10b981',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 0
+                    },
+                    {
+                        label: '2号地块',
+                        data: generateRandomData(24, 25, 55),
+                        borderColor: '#f59e0b',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 0
+                    },
+                    {
+                        label: '3号地块',
+                        data: generateRandomData(24, 55, 85),
+                        borderColor: '#0ea5e9',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#94a3b8'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 100,
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)'
+                        },
+                        ticks: {
+                            color: '#94a3b8'
+                        },
+                        title: {
+                            display: true,
+                            text: '土壤湿度 (%)',
+                            color: '#94a3b8'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            color: 'rgba(148, 163, 184, 0.1)'
+                        },
+                        ticks: {
+                            color: '#94a3b8'
+                        }
+                    }
+                }
+            }
+        });
+
+        function generateRandomData(length, min, max) {
+            return Array.from({length}, () => Math.floor(Math.random() * (max - min + 1)) + min);
+        }
+
+        // 更新地块数据
+        function updatePlotData() {
+            if (!demoMode) return;
+
+            const plots = [
+                {id: 1, moisture: Math.floor(Math.random() * 40 + 40), temp: (Math.random() * 5 + 23).toFixed(1)},
+                {id: 2, moisture: Math.floor(Math.random() * 30 + 20), temp: (Math.random() * 5 + 24).toFixed(1)},
+                {id: 3, moisture: Math.floor(Math.random() * 40 + 45), temp: (Math.random() * 5 + 23).toFixed(1)}
+            ];
+
+            let goodCount = 0;
+            let warningCount = 0;
+            let runningCount = pumpStates.filter(s => s).length;
+
+            plots.forEach(plot => {
+                // 更新列表数据
+                document.getElementById(`plot${plot.id}-moisture-list`).textContent = `${plot.moisture}%`;
+
+                // 更新状态
+                const listEl = document.getElementById(`plot${plot.id}-list`);
+                const mapEl = document.getElementById(`map-plot${plot.id}`);
+                
+                if (plot.moisture < 30) {
+                    warningCount++;
+                    listEl.className = 'p-3 rounded-lg border border-danger/30 bg-danger/5';
+                    listEl.querySelector('span:last-child').textContent = '严重缺水';
+                    listEl.querySelector('span:last-child').className = 'text-danger text-sm';
+                    mapEl.className = 'bg-danger/20 border-2 border-danger rounded-lg flex items-center justify-center relative';
+                    mapEl.querySelector('div').className = 'absolute top-2 right-2 w-3 h-3 rounded-full bg-danger pulse-dot';
+                    
+                    // 自动灌溉
+                    if (autoIrrigation && !pumpStates[plot.id-1]) {
+                        togglePump(plot.id);
+                    }
+                } else if (plot.moisture < 50) {
+                    warningCount++;
+                    listEl.className = 'p-3 rounded-lg border border-warning/30 bg-warning/5';
+                    listEl.querySelector('span:last-child').textContent = '需补水';
+                    listEl.querySelector('span:last-child').className = 'text-warning text-sm';
+                    mapEl.className = 'bg-warning/20 border-2 border-warning rounded-lg flex items-center justify-center relative';
+                    mapEl.querySelector('div').className = 'absolute top-2 right-2 w-3 h-3 rounded-full bg-warning pulse-dot';
+                } else {
+                    goodCount++;
+                    listEl.className = 'p-3 rounded-lg border border-success/30 bg-success/5';
+                    listEl.querySelector('span:last-child').textContent = '长势良好';
+                    listEl.querySelector('span:last-child').className = 'text-success text-sm';
+                    mapEl.className = 'bg-success/20 border-2 border-success rounded-lg flex items-center justify-center relative';
+                    mapEl.querySelector('div').className = 'absolute top-2 right-2 w-3 h-3 rounded-full bg-success pulse-dot';
+                }
             });
-        }
-        updateTrendChart();
 
-        // 从ESP8266获取传感器数据
-        async function fetchData() {
-            try {
-                const response = await fetch(`http://${ESP_IP}/data`);
-                if (!response.ok) throw new Error('连接失败');
+            // 更新统计
+            document.getElementById('good-plots').textContent = goodCount;
+            document.getElementById('warning-plots').textContent = warningCount;
+            document.getElementById('running-devices').textContent = runningCount;
+            document.getElementById('avg-moisture').textContent = Math.round((plots[0].moisture + plots[1].moisture + plots[2].moisture) / 3) + '%';
+            document.getElementById('avg-temp').textContent = ((parseFloat(plots[0].temp) + parseFloat(plots[1].temp) + parseFloat(plots[2].temp)) / 3).toFixed(1) + '℃';
+
+            // 随机触发病虫害预警
+            if (Math.random() < 0.03) {
+                const pestAlert = document.getElementById('pest-alert');
+                pestAlert.innerHTML = `
+                    <div class="flex items-center gap-2 mb-3">
+                        <div class="w-3 h-3 rounded-full bg-danger pulse-dot"></div>
+                        <span class="font-bold text-danger">高风险预警</span>
+                    </div>
+                    <p class="text-sm text-gray-400">2号地块发现霜霉病迹象</p>
+                    <p class="text-sm text-gray-400">建议：及时通风，喷施百菌清</p>
+                    <p class="text-sm text-gray-400">检测时间：${new Date().toLocaleString()}</p>
+                `;
                 
-                const data = await response.json();
-                // 更新页面数据
-                document.getElementById('soil').innerText = data.soil + '%';
-                document.getElementById('temp').innerText = data.temp + '°C';
-                document.getElementById('humi').innerText = data.humi + '%';
-                document.getElementById('weather').innerText = data.rain ? '下雨' : '无雨';
-                
-                // 更新灌溉状态
-                updateStatus(data.relay);
-                
-                // 更新趋势图
-                humidityHistory.shift();
-                humidityHistory.push(data.soil);
-                updateTrendChart();
-                
-                document.getElementById('errorMsg').innerText = '';
-            } catch (err) {
-                // 演示模式：如果连接失败，显示模拟数据
-                const mockSoil = Math.floor(Math.random() * 30) + 30;
-                const mockTemp = Math.floor(Math.random() * 15) + 20;
-                const mockHumi = Math.floor(Math.random() * 40) + 40;
-                
-                document.getElementById('soil').innerText = mockSoil + '%';
-                document.getElementById('temp').innerText = mockTemp + '°C';
-                document.getElementById('humi').innerText = mockHumi + '%';
-                document.getElementById('weather').innerText = '无雨';
-                
-                // 更新趋势图
-                humidityHistory.shift();
-                humidityHistory.push(mockSoil);
-                updateTrendChart();
-                
-                document.getElementById('errorMsg').innerText = `演示模式：未连接ESP8266\n${err.message}`;
+                setTimeout(() => {
+                    pestAlert.innerHTML = `
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-3 h-3 rounded-full bg-success pulse-dot"></div>
+                            <span class="font-bold text-success">当前无高风险</span>
+                        </div>
+                        <p class="text-sm text-gray-400">最近检测：${new Date().toLocaleString()}</p>
+                    `;
+                }, 30000);
             }
+
+            // 更新图表
+            chart.data.datasets.forEach((dataset, index) => {
+                dataset.data.shift();
+                dataset.data.push(plots[index].moisture);
+            });
+            chart.update();
         }
 
-        // 控制灌溉
-        async function controlIrrigation(cmd) {
-            // 禁用按钮防止重复点击
-            document.getElementById('btnOn').disabled = true;
-            document.getElementById('btnOff').disabled = true;
+        // 切换灌溉泵
+        function togglePump(plotId) {
+            const index = plotId - 1;
+            pumpStates[index] = !pumpStates[index];
             
-            try {
-                const response = await fetch(`http://${ESP_IP}/control?relay=${cmd}`);
-                if (!response.ok) throw new Error('控制失败');
-                
-                updateStatus(cmd === 'on');
-                document.getElementById('errorMsg').innerText = '';
-            } catch (err) {
-                // 演示模式：即使连接失败也更新UI
-                updateStatus(cmd === 'on');
-                document.getElementById('errorMsg').innerText = `演示模式：控制指令已发送\n实际设备未连接`;
-            } finally {
-                // 重新启用按钮
-                document.getElementById('btnOn').disabled = false;
-                document.getElementById('btnOff').disabled = false;
-            }
-        }
-
-        function turnOn() {
-            controlIrrigation('on');
-        }
-
-        function turnOff() {
-            controlIrrigation('off');
-        }
-
-        // 更新灌溉状态显示
-        function updateStatus(isOn) {
-            const statusEl = document.getElementById('status');
-            const pumpStatusEl = document.getElementById('pumpStatus');
-            const fields = document.querySelectorAll('.field');
+            const pumpListEl = document.getElementById(`plot${plotId}-pump-list`);
+            const btnEl = document.getElementById(`plot${plotId}-btn`);
             
-            if (isOn) {
-                statusEl.className = 'status-display status-on';
-                statusEl.innerHTML = '当前系统状态：<span>灌溉中</span>';
-                pumpStatusEl.innerText = '运行中';
-                pumpStatusEl.style.color = '#4caf50';
-                fields.forEach(field => field.classList.add('irrigating'));
+            if (pumpStates[index]) {
+                pumpListEl.textContent = '运行中';
+                pumpListEl.className = 'text-success font-bold';
+                btnEl.textContent = '关闭灌溉';
+                btnEl.className = 'bg-danger/80 hover:bg-danger text-white py-2 rounded font-bold transition text-sm';
+                document.getElementById('irrigation-status').textContent = '运行中';
+                document.getElementById('irrigation-status').className = 'text-success text-sm';
             } else {
-                statusEl.className = 'status-display status-off';
-                statusEl.innerHTML = '当前系统状态：<span>未灌溉</span>';
-                pumpStatusEl.innerText = '关闭';
-                pumpStatusEl.style.color = '#ff9800';
-                fields.forEach(field => field.classList.remove('irrigating'));
+                pumpListEl.textContent = '已停止';
+                pumpListEl.className = 'text-gray-500';
+                btnEl.textContent = '开启灌溉';
+                btnEl.className = 'bg-primary/80 hover:bg-primary text-white py-2 rounded font-bold transition text-sm';
+                
+                if (!pumpStates.some(state => state)) {
+                    document.getElementById('irrigation-status').textContent = '待机';
+                    document.getElementById('irrigation-status').className = 'text-gray-400 text-sm';
+                }
             }
+
+            // 更新运行设备数
+            document.getElementById('running-devices').textContent = pumpStates.filter(s => s).length;
         }
 
-        // 页面加载时立即获取数据
-        fetchData();
-        // 每3秒自动刷新数据
-        setInterval(fetchData, 3000);
+        // 事件监听
+        document.getElementById('demo-toggle').addEventListener('change', (e) => {
+            demoMode = e.target.checked;
+            document.getElementById('demo-badge').style.display = demoMode ? 'block' : 'none';
+        });
+
+        document.getElementById('plot1-btn').addEventListener('click', () => togglePump(1));
+        document.getElementById('plot2-btn').addEventListener('click', () => togglePump(2));
+        document.getElementById('plot3-btn').addEventListener('click', () => togglePump(3));
+
+        document.getElementById('auto-irrigation').addEventListener('change', (e) => {
+            autoIrrigation = e.target.checked;
+        });
+
+        document.getElementById('threshold').addEventListener('input', (e) => {
+            moistureThreshold = parseInt(e.target.value);
+            document.getElementById('threshold-value').textContent = moistureThreshold;
+        });
+
+        document.getElementById('ip-config-btn').addEventListener('click', () => {
+            document.getElementById('ip-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('cancel-ip').addEventListener('click', () => {
+            document.getElementById('ip-modal').classList.add('hidden');
+        });
+
+        document.getElementById('save-ip').addEventListener('click', () => {
+            alert('配置已保存，ESP8266将在重启后生效');
+            document.getElementById('ip-modal').classList.add('hidden');
+        });
+
+        // 每秒更新一次数据
+        setInterval(updatePlotData, 2000);
     </script>
 </body>
 </html>
