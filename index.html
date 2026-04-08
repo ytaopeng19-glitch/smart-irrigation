@@ -51,15 +51,15 @@
 </head>
 <body class="bg-dark bg-grid min-h-screen font-tech text-gray-200">
     <!-- 顶部标题栏 -->
-    <header class="bg-dark-card border-b border-dark-border py-3 px-4">
+    <header class="bg-dark-card border-b border-dark-border py-4 px-6">
         <div class="container mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="w-2 h-8 bg-primary rounded"></div>
-                <h1 class="text-2xl font-bold text-white">智慧农业大数据可视化系统</h1>
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-10 bg-primary rounded"></div>
+                <h1 class="text-3xl font-bold text-white tracking-wider">智慧农业大数据可视化系统</h1>
             </div>
-            <div class="flex items-center gap-6">
-                <span id="current-time" class="text-primary"></span>
-                <div class="flex items-center gap-2">
+            <div class="flex items-center gap-8">
+                <span id="current-time" class="text-primary text-lg font-medium"></span>
+                <div class="flex items-center gap-3">
                     <span id="demo-badge" class="bg-warning/20 text-warning px-3 py-1 rounded-full text-sm font-bold">演示模式</span>
                     <label class="relative inline-flex items-center cursor-pointer">
                         <input type="checkbox" id="demo-toggle" class="sr-only peer" checked>
@@ -70,62 +70,62 @@
         </div>
     </header>
 
-    <main class="container mx-auto p-4">
+    <main class="container mx-auto p-6">
         <!-- 顶部统计卡片 -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-                <div class="text-gray-400 text-sm mb-1">总地块数</div>
-                <div class="text-3xl font-bold text-primary">3</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-6">
+            <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+                <div class="text-gray-400 text-sm mb-2">总地块数</div>
+                <div class="text-4xl font-bold text-primary">3</div>
             </div>
-            <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-                <div class="text-gray-400 text-sm mb-1">长势良好</div>
-                <div class="text-3xl font-bold text-success" id="good-plots">2</div>
+            <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+                <div class="text-gray-400 text-sm mb-2">长势良好</div>
+                <div class="text-4xl font-bold text-success" id="good-plots">2</div>
             </div>
-            <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-                <div class="text-gray-400 text-sm mb-1">需关注</div>
-                <div class="text-3xl font-bold text-warning" id="warning-plots">1</div>
+            <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+                <div class="text-gray-400 text-sm mb-2">需关注</div>
+                <div class="text-4xl font-bold text-warning" id="warning-plots">1</div>
             </div>
-            <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-                <div class="text-gray-400 text-sm mb-1">运行中设备</div>
-                <div class="text-3xl font-bold text-danger" id="running-devices">1</div>
+            <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+                <div class="text-gray-400 text-sm mb-2">运行中设备</div>
+                <div class="text-4xl font-bold text-danger" id="running-devices">1</div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
             <!-- 左侧：环境概览 -->
-            <div class="lg:col-span-3 space-y-4">
-                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <div class="w-1 h-5 bg-primary rounded"></div>
+            <div class="lg:col-span-3 space-y-6">
+                <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+                    <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-primary rounded"></div>
                         环境监测
                     </h3>
-                    <div class="space-y-3">
+                    <div class="space-y-4 text-base">
                         <div class="flex justify-between items-center">
                             <span class="text-gray-400">空气温度</span>
-                            <span class="text-primary font-bold" id="avg-temp">25.6℃</span>
+                            <span class="text-primary font-bold text-lg" id="avg-temp">25.6℃</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-gray-400">平均湿度</span>
-                            <span class="text-primary font-bold" id="avg-moisture">57%</span>
+                            <span class="text-primary font-bold text-lg" id="avg-moisture">57%</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-gray-400">光照强度</span>
-                            <span class="text-primary font-bold">6800 Lux</span>
+                            <span class="text-primary font-bold text-lg">6800 Lux</span>
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-gray-400">风速</span>
-                            <span class="text-primary font-bold">2.3 m/s</span>
+                            <span class="text-primary font-bold text-lg">2.3 m/s</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- 地块列表 -->
-                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <div class="w-1 h-5 bg-primary rounded"></div>
+                <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+                    <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-primary rounded"></div>
                         地块详情
                     </h3>
-                    <div class="space-y-3">
+                    <div class="space-y-4 text-base">
                         <!-- 地块1 -->
                         <div id="plot1-list" class="p-3 rounded-lg border border-success/30 bg-success/5">
                             <div class="flex justify-between items-center mb-2">
@@ -167,39 +167,39 @@
 
             <!-- 中间：地图区域 -->
             <div class="lg:col-span-6">
-                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow h-full">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <div class="w-1 h-5 bg-primary rounded"></div>
+                <div class="bg-dark-card border-glow rounded-lg p-5 card-glow h-full">
+                    <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-primary rounded"></div>
                         农田分布地图
                     </h3>
-                    <div class="relative h-80 bg-gradient-to-br from-green-900/20 to-blue-900/20 rounded-lg overflow-hidden">
+                    <div class="relative h-96 bg-gradient-to-br from-green-900/20 to-blue-900/20 rounded-lg overflow-hidden">
                         <!-- 模拟农田地图 -->
                         <div class="absolute inset-0 p-4">
-                            <div class="grid grid-cols-3 gap-2 h-full">
+                            <div class="grid grid-cols-3 gap-3 h-full">
                                 <div id="map-plot1" class="bg-success/20 border-2 border-success rounded-lg flex items-center justify-center relative">
-                                    <span class="font-bold">1号地块</span>
-                                    <div class="absolute top-2 right-2 w-3 h-3 rounded-full bg-success pulse-dot"></div>
+                                    <span class="font-bold text-lg">1号地块</span>
+                                    <div class="absolute top-3 right-3 w-3 h-3 rounded-full bg-success pulse-dot"></div>
                                 </div>
                                 <div id="map-plot2" class="bg-warning/20 border-2 border-warning rounded-lg flex items-center justify-center relative">
-                                    <span class="font-bold">2号地块</span>
-                                    <div class="absolute top-2 right-2 w-3 h-3 rounded-full bg-warning pulse-dot"></div>
+                                    <span class="font-bold text-lg">2号地块</span>
+                                    <div class="absolute top-3 right-3 w-3 h-3 rounded-full bg-warning pulse-dot"></div>
                                 </div>
                                 <div id="map-plot3" class="bg-success/20 border-2 border-success rounded-lg flex items-center justify-center relative">
-                                    <span class="font-bold">3号地块</span>
-                                    <div class="absolute top-2 right-2 w-3 h-3 rounded-full bg-success pulse-dot"></div>
+                                    <span class="font-bold text-lg">3号地块</span>
+                                    <div class="absolute top-3 right-3 w-3 h-3 rounded-full bg-success pulse-dot"></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- 控制按钮覆盖 -->
-                        <div class="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-2">
-                            <button id="plot1-btn" class="bg-primary/80 hover:bg-primary text-white py-2 rounded font-bold transition text-sm">
+                        <div class="absolute bottom-4 left-4 right-4 grid grid-cols-3 gap-3">
+                            <button id="plot1-btn" class="bg-primary/80 hover:bg-primary text-white py-2.5 rounded font-bold transition text-base">
                                 开启灌溉
                             </button>
-                            <button id="plot2-btn" class="bg-primary/80 hover:bg-primary text-white py-2 rounded font-bold transition text-sm">
+                            <button id="plot2-btn" class="bg-primary/80 hover:bg-primary text-white py-2.5 rounded font-bold transition text-base">
                                 开启灌溉
                             </button>
-                            <button id="plot3-btn" class="bg-primary/80 hover:bg-primary text-white py-2 rounded font-bold transition text-sm">
+                            <button id="plot3-btn" class="bg-primary/80 hover:bg-primary text-white py-2.5 rounded font-bold transition text-base">
                                 开启灌溉
                             </button>
                         </div>
@@ -208,38 +208,38 @@
             </div>
 
             <!-- 右侧：预警和农机 -->
-            <div class="lg:col-span-3 space-y-4">
+            <div class="lg:col-span-3 space-y-6">
                 <!-- 病虫害预警 -->
-                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <div class="w-1 h-5 bg-primary rounded"></div>
+                <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+                    <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-primary rounded"></div>
                         病虫害预警
                     </h3>
-                    <div id="pest-alert">
+                    <div id="pest-alert" class="text-base">
                         <div class="flex items-center gap-2 mb-3">
                             <div class="w-3 h-3 rounded-full bg-success pulse-dot"></div>
-                            <span class="font-bold text-success">当前无高风险</span>
+                            <span class="font-bold text-success">当前无高风险病虫害</span>
                         </div>
-                        <p class="text-sm text-gray-400">最近检测：2026-04-08 16:00</p>
+                        <p class="text-sm text-gray-400">最近一次检测：2026-04-08 16:00</p>
                     </div>
                 </div>
 
                 <!-- 农机状态 -->
-                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <div class="w-1 h-5 bg-primary rounded"></div>
+                <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+                    <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-primary rounded"></div>
                         农机作业状态
                     </h3>
-                    <div class="space-y-3">
-                        <div class="flex justify-between items-center p-2 rounded bg-success/5 border border-success/30">
+                    <div class="space-y-4 text-base">
+                        <div class="flex justify-between items-center p-2.5 rounded bg-success/5 border border-success/30">
                             <span>播种机 #01</span>
                             <span class="text-success text-sm">作业中</span>
                         </div>
-                        <div class="flex justify-between items-center p-2 rounded bg-gray-700/30 border border-gray-600/30">
+                        <div class="flex justify-between items-center p-2.5 rounded bg-gray-700/30 border border-gray-600/30">
                             <span>植保无人机 #01</span>
                             <span class="text-gray-400 text-sm">空闲</span>
                         </div>
-                        <div class="flex justify-between items-center p-2 rounded bg-gray-700/30 border border-gray-600/30">
+                        <div class="flex justify-between items-center p-2.5 rounded bg-gray-700/30 border border-gray-600/30">
                             <span>总灌溉系统</span>
                             <span id="irrigation-status" class="text-gray-400 text-sm">待机</span>
                         </div>
@@ -247,12 +247,12 @@
                 </div>
 
                 <!-- 系统设置 -->
-                <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <div class="w-1 h-5 bg-primary rounded"></div>
+                <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+                    <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                        <div class="w-1 h-6 bg-primary rounded"></div>
                         系统控制
                     </h3>
-                    <div class="space-y-4">
+                    <div class="space-y-4 text-base">
                         <div class="flex justify-between items-center">
                             <span>自动灌溉</span>
                             <label class="relative inline-flex items-center cursor-pointer">
@@ -261,10 +261,10 @@
                             </label>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span>阈值: <span id="threshold-value">30</span>%</span>
+                            <span>自动灌溉阈值: <span id="threshold-value">30</span>%</span>
                             <input type="range" id="threshold" value="30" min="10" max="60" class="w-24 accent-primary">
                         </div>
-                        <button id="ip-config-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded font-bold transition text-sm">
+                        <button id="ip-config-btn" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2.5 rounded font-bold transition text-base">
                             ESP8266 WiFi配置
                         </button>
                     </div>
@@ -272,39 +272,40 @@
             </div>
         </div>
 
-        <!-- 底部：湿度趋势图 -->
-        <div class="bg-dark-card border-glow rounded-lg p-4 card-glow">
-            <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                <div class="w-1 h-5 bg-primary rounded"></div>
+        <!-- 底部：湿度趋势图（电脑端优化版） -->
+        <div class="bg-dark-card border-glow rounded-lg p-5 card-glow">
+            <h3 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                <div class="w-1 h-6 bg-primary rounded"></div>
                 24小时土壤湿度趋势
             </h3>
-            <canvas id="moisture-chart" height="150"></canvas>
+            <!-- 电脑端高度180px，手机端自动适配100px -->
+            <canvas id="moisture-chart" class="w-full" style="height: 180px; max-height: 180px;"></canvas>
         </div>
     </main>
 
     <!-- IP配置弹窗 -->
     <div id="ip-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
-        <div class="bg-dark-card border-glow rounded-lg p-6 w-11/12 max-w-md card-glow">
-            <h3 class="text-xl font-bold text-white mb-4">ESP8266 WiFi配置</h3>
+        <div class="bg-dark-card border-glow rounded-lg p-6 w-11/12 max-w-lg card-glow">
+            <h3 class="text-xl font-bold text-white mb-5">ESP8266 WiFi配置</h3>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-sm text-gray-400 mb-1">WiFi名称</label>
-                    <input type="text" class="w-full bg-dark border border-dark-border rounded px-3 py-2 text-white" placeholder="输入您的WiFi名称">
+                    <label class="block text-sm text-gray-400 mb-2">WiFi名称</label>
+                    <input type="text" class="w-full bg-dark border border-dark-border rounded px-4 py-3 text-white text-base" placeholder="输入您的WiFi名称">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-1">WiFi密码</label>
-                    <input type="password" class="w-full bg-dark border border-dark-border rounded px-3 py-2 text-white" placeholder="输入您的WiFi密码">
+                    <label class="block text-sm text-gray-400 mb-2">WiFi密码</label>
+                    <input type="password" class="w-full bg-dark border border-dark-border rounded px-4 py-3 text-white text-base" placeholder="输入您的WiFi密码">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-400 mb-1">MQTT服务器地址</label>
-                    <input type="text" class="w-full bg-dark border border-dark-border rounded px-3 py-2 text-white" value="192.168.1.100:1883">
+                    <label class="block text-sm text-gray-400 mb-2">MQTT服务器地址</label>
+                    <input type="text" class="w-full bg-dark border border-dark-border rounded px-4 py-3 text-white text-base" value="192.168.1.100:1883">
                 </div>
             </div>
-            <div class="flex gap-3 mt-6">
-                <button id="cancel-ip" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-2 rounded font-bold transition">
+            <div class="flex gap-4 mt-6">
+                <button id="cancel-ip" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded font-bold transition text-base">
                     取消
                 </button>
-                <button id="save-ip" class="flex-1 bg-primary hover:bg-primary/80 text-white py-2 rounded font-bold transition">
+                <button id="save-ip" class="flex-1 bg-primary hover:bg-primary/80 text-white py-3 rounded font-bold transition text-base">
                     保存配置
                 </button>
             </div>
@@ -326,7 +327,7 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // 初始化图表
+        // 初始化图表（电脑端优化）
         const ctx = document.getElementById('moisture-chart').getContext('2d');
         const chart = new Chart(ctx, {
             type: 'line',
@@ -339,7 +340,8 @@
                         borderColor: '#10b981',
                         tension: 0.3,
                         fill: false,
-                        pointRadius: 0
+                        pointRadius: 0,
+                        borderWidth: 2.5
                     },
                     {
                         label: '2号地块',
@@ -347,7 +349,8 @@
                         borderColor: '#f59e0b',
                         tension: 0.3,
                         fill: false,
-                        pointRadius: 0
+                        pointRadius: 0,
+                        borderWidth: 2.5
                     },
                     {
                         label: '3号地块',
@@ -355,35 +358,56 @@
                         borderColor: '#0ea5e9',
                         tension: 0.3,
                         fill: false,
-                        pointRadius: 0
+                        pointRadius: 0,
+                        borderWidth: 2.5
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        top: 10,
+                        right: 10,
+                        bottom: 10,
+                        left: 10
+                    }
+                },
                 plugins: {
                     legend: {
                         position: 'top',
                         labels: {
-                            color: '#94a3b8'
+                            color: '#94a3b8',
+                            font: {
+                                size: 14
+                            },
+                            boxWidth: 25,
+                            padding: 15
                         }
                     }
                 },
                 scales: {
                     y: {
-                        min: 0,
-                        max: 100,
+                        min: 20,
+                        max: 90,
                         grid: {
                             color: 'rgba(148, 163, 184, 0.1)'
                         },
                         ticks: {
-                            color: '#94a3b8'
+                            color: '#94a3b8',
+                            font: {
+                                size: 12
+                            },
+                            stepSize: 10
                         },
                         title: {
                             display: true,
                             text: '土壤湿度 (%)',
-                            color: '#94a3b8'
+                            color: '#94a3b8',
+                            font: {
+                                size: 12
+                            }
                         }
                     },
                     x: {
@@ -391,7 +415,11 @@
                             color: 'rgba(148, 163, 184, 0.1)'
                         },
                         ticks: {
-                            color: '#94a3b8'
+                            color: '#94a3b8',
+                            font: {
+                                size: 12
+                            },
+                            maxTicksLimit: 12
                         }
                     }
                 }
@@ -430,7 +458,7 @@
                     listEl.querySelector('span:last-child').textContent = '严重缺水';
                     listEl.querySelector('span:last-child').className = 'text-danger text-sm';
                     mapEl.className = 'bg-danger/20 border-2 border-danger rounded-lg flex items-center justify-center relative';
-                    mapEl.querySelector('div').className = 'absolute top-2 right-2 w-3 h-3 rounded-full bg-danger pulse-dot';
+                    mapEl.querySelector('div').className = 'absolute top-3 right-3 w-3 h-3 rounded-full bg-danger pulse-dot';
                     
                     // 自动灌溉
                     if (autoIrrigation && !pumpStates[plot.id-1]) {
@@ -442,14 +470,14 @@
                     listEl.querySelector('span:last-child').textContent = '需补水';
                     listEl.querySelector('span:last-child').className = 'text-warning text-sm';
                     mapEl.className = 'bg-warning/20 border-2 border-warning rounded-lg flex items-center justify-center relative';
-                    mapEl.querySelector('div').className = 'absolute top-2 right-2 w-3 h-3 rounded-full bg-warning pulse-dot';
+                    mapEl.querySelector('div').className = 'absolute top-3 right-3 w-3 h-3 rounded-full bg-warning pulse-dot';
                 } else {
                     goodCount++;
                     listEl.className = 'p-3 rounded-lg border border-success/30 bg-success/5';
                     listEl.querySelector('span:last-child').textContent = '长势良好';
                     listEl.querySelector('span:last-child').className = 'text-success text-sm';
                     mapEl.className = 'bg-success/20 border-2 border-success rounded-lg flex items-center justify-center relative';
-                    mapEl.querySelector('div').className = 'absolute top-2 right-2 w-3 h-3 rounded-full bg-success pulse-dot';
+                    mapEl.querySelector('div').className = 'absolute top-3 right-3 w-3 h-3 rounded-full bg-success pulse-dot';
                 }
             });
 
@@ -466,10 +494,9 @@
                 pestAlert.innerHTML = `
                     <div class="flex items-center gap-2 mb-3">
                         <div class="w-3 h-3 rounded-full bg-danger pulse-dot"></div>
-                        <span class="font-bold text-danger">高风险预警</span>
+                        <span class="font-bold text-danger">高风险预警：2号地块发现霜霉病迹象</span>
                     </div>
-                    <p class="text-sm text-gray-400">2号地块发现霜霉病迹象</p>
-                    <p class="text-sm text-gray-400">建议：及时通风，喷施百菌清</p>
+                    <p class="text-sm text-gray-400">建议：及时通风，喷施百菌清溶液</p>
                     <p class="text-sm text-gray-400">检测时间：${new Date().toLocaleString()}</p>
                 `;
                 
@@ -477,9 +504,9 @@
                     pestAlert.innerHTML = `
                         <div class="flex items-center gap-2 mb-3">
                             <div class="w-3 h-3 rounded-full bg-success pulse-dot"></div>
-                            <span class="font-bold text-success">当前无高风险</span>
+                            <span class="font-bold text-success">当前无高风险病虫害</span>
                         </div>
-                        <p class="text-sm text-gray-400">最近检测：${new Date().toLocaleString()}</p>
+                        <p class="text-sm text-gray-400">最近一次检测：${new Date().toLocaleString()}</p>
                     `;
                 }, 30000);
             }
@@ -504,14 +531,14 @@
                 pumpListEl.textContent = '运行中';
                 pumpListEl.className = 'text-success font-bold';
                 btnEl.textContent = '关闭灌溉';
-                btnEl.className = 'bg-danger/80 hover:bg-danger text-white py-2 rounded font-bold transition text-sm';
+                btnEl.className = 'bg-danger/80 hover:bg-danger text-white py-2.5 rounded font-bold transition text-base';
                 document.getElementById('irrigation-status').textContent = '运行中';
                 document.getElementById('irrigation-status').className = 'text-success text-sm';
             } else {
                 pumpListEl.textContent = '已停止';
                 pumpListEl.className = 'text-gray-500';
                 btnEl.textContent = '开启灌溉';
-                btnEl.className = 'bg-primary/80 hover:bg-primary text-white py-2 rounded font-bold transition text-sm';
+                btnEl.className = 'bg-primary/80 hover:bg-primary text-white py-2.5 rounded font-bold transition text-base';
                 
                 if (!pumpStates.some(state => state)) {
                     document.getElementById('irrigation-status').textContent = '待机';
